@@ -1,0 +1,55 @@
+<div class="flex justify-center py-5">
+  <div class="w-[900px]">
+    <ng-container *ngFor="let formGroup of formArray.controls; let i = index">
+      <div class="my-5" [formGroup]="formGroup">
+        <div *ngIf="formGroup.controls.answerFormat.value === EAnswerFormat.Paragraph; else checklistBlock"
+             class="tui-form__row">
+          <tui-text-area
+            formControlName="answer"
+            [expandable]="true"
+          >
+            {{formGroup.controls.question.value}}
+            <span *ngIf="formGroup.controls.isRequired.value" class="tui-required"></span>
+          </tui-text-area>
+          <tui-error
+            formControlName="answer"
+            [error]="[] | tuiFieldError | async"
+          ></tui-error>
+        </div>
+        <ng-template #checklistBlock>
+          <div class="tui-text_h6">
+            <span>{{formGroup.controls.question.value}}</span> <span *ngIf="formGroup.controls.isRequired.value"
+                                                                     class="tui-required"></span>
+          </div>
+          <ng-container *ngFor="let option of formGroup.controls.answerOptions.controls">
+            <div class="tui-form__row" [formGroup]="option">
+              <tui-checkbox-labeled
+                formControlName="checked"
+                size="l"
+                class="tui-form__checkbox"
+              >
+                {{option.controls.answerOption.value}}
+              </tui-checkbox-labeled>
+
+              <tui-text-area
+                *ngIf="option.controls.answerOption.value === 'Other' && option.controls.checked.value"
+                [formControl]="formGroup.controls.answer"
+                [expandable]="true"
+              >
+              </tui-text-area>
+            </div>
+          </ng-container>
+        </ng-template>
+      </div>
+    </ng-container>
+    <div class="flex items-center justify-between">
+      <button tuiButton type="button" appearance="outline" (click)="showAddNewQuestionsModal()">Add New Question
+      </button>
+      <button tuiButton type="button" iconRight="tuiIconChevronRightLarge"
+              [disabled]="formArray.invalid || formArray.controls.length < 1"
+              (click)="reviewAnswers()">
+        Review my answers
+      </button>
+    </div>
+  </div>
+</div>

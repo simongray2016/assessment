@@ -1,0 +1,20 @@
+<div class="flex justify-center py-5">
+  <div class="w-[900px]">
+    <div *ngFor="let item of answers$ | async" class="my-5">
+      <div class="tui-text_h6">{{item.question}}</div>
+      <div class="p-5">
+        <div *ngIf="item.answerFormat === EAnswerFormat.Paragraph; else checklistAnswers">
+          {{item.answer}}
+        </div>
+        <ng-template #checklistAnswers>
+          <div *ngFor="let answer of item.answers">{{answer}}</div>
+          <div *ngIf="item.answerOptions">Other - {{item.answer}}</div>
+        </ng-template>
+      </div>
+    </div>
+    <button tuiButton type="button" icon="tuiIconChevronLeftLarge"
+            [routerLink]="['/form/builder']">
+      Back to Forms Builder
+    </button>
+  </div>
+</div>

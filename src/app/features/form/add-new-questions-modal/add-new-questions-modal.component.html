@@ -1,0 +1,85 @@
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <div class="tui-text_h6">Add a New Questions</div>
+  <div class="tui-form__row">
+    <tui-select
+      formControlName="answerFormat"
+    >
+      Question Type
+      <tui-data-list-wrapper
+        *tuiDataList
+        [items]="answerFormats"
+      ></tui-data-list-wrapper>
+    </tui-select>
+  </div>
+  <div class="tui-form__row">
+    <tui-input
+      formControlName="question"
+    >
+      Type question here
+      <input
+        tuiTextfield
+      />
+      <span class="tui-required"></span>
+    </tui-input>
+    <tui-error
+      formControlName="question"
+      [error]="[] | tuiFieldError | async"
+    ></tui-error>
+  </div>
+  <ng-container formArrayName="answerOptions">
+    <div class="tui-form__row" *ngFor="let control of form.controls.answerOptions.controls; let i = index">
+      <tui-input
+        [formControl]="control"
+      >
+        Add Answer Option
+        <input
+          tuiTextfield
+        />
+        <span class="tui-required"></span>
+      </tui-input>
+      <tui-error
+        [formControl]="control"
+        [error]="[] | tuiFieldError | async"
+      ></tui-error>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="form.controls.answerFormat.value === EAnswerFormat.CheckboxList">
+    <button
+      tuiButton
+      type="button"
+      appearance="flat"
+      icon="tuiIconPlus"
+      class="my-2"
+      (click)="addAnswerOption()"
+      *ngIf="form.controls.answerOptions.controls.length < 5"
+    >
+      Add another answer
+    </button>
+    <div class="my-2">
+      <tui-checkbox-labeled
+        formControlName="otherOptions"
+        size="l"
+        class="tui-form__checkbox"
+      >
+        Allow user to specify their own answer
+      </tui-checkbox-labeled>
+    </div>
+  </ng-container>
+  <div class="my-2">
+    <tui-checkbox-labeled
+      formControlName="isRequired"
+      size="l"
+      class="tui-form__checkbox"
+    >
+      This field is required
+    </tui-checkbox-labeled>
+  </div>
+  <div class="flex justify-end">
+    <button
+      tuiButton
+      type="submit"
+    >
+      Submit
+    </button>
+  </div>
+</form>
